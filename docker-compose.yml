@@ -1,0 +1,15 @@
+services:
+  morozka:
+    build: .
+    container_name: morozka-app
+    restart: always
+    ports:
+      - "80:3001"
+    environment:
+      - NODE_ENV=production
+      - JWT_SECRET=${JWT_SECRET:-morozka-secret-key}
+      - PORT=3001
+    volumes:
+      - ./server/morozka.db:/app/server/morozka.db
+    env_file:
+      - .env

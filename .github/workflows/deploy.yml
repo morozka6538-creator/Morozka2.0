@@ -1,0 +1,36 @@
+name: ❄️ Morozka 2.0 Pro Max Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🚀 Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: "" # If needed
+          script: |
+            mkdir -p /root/morozka
+            cd /root/morozka
+            # This workflow assumes you are using git on the server.
+            # If not, we can use scp-action to transfer files.
+            # For now, let's assume git.
+            git pull origin main || (git clone https://github.com/${{ github.repository }} . && git checkout main)
+            
+            # Setup environment
+            if [ ! -f .env ]; then
+              echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > .env
+              echo "PORT=3001" >> .env
+            fi
+            
+            # Dockerized Deploy
+            docker compose up -d --build
