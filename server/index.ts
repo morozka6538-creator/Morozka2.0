@@ -254,7 +254,7 @@ io.on('connection', (socket) => {
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('/:splat*', (req, res) => {
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(clientDistPath, 'index.html'));
 });
 
