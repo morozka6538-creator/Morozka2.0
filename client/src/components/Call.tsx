@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Peer from 'simple-peer/simplepeer.min.js';
 import socket from '../socket';
-import { PhoneOff, Mic, MicOff, Video, VideoOff, Monitor, MonitorOff } from 'lucide-react';
+import { PhoneOff, Mic, MicOff, Video, VideoOff, Monitor } from 'lucide-react';
 
 interface CallProps {
   userId: number;
@@ -19,13 +19,10 @@ const Call: React.FC<CallProps> = ({ userId, callData, onClose }) => {
   const [remoteScreenStream, setRemoteScreenStream] = useState<MediaStream | null>(null);
   
   const ringtoneRef = useRef<HTMLAudioElement | null>(null);
-  const myVideo = useRef<HTMLVideoElement>(null);
-  const peerVideo = useRef<HTMLVideoElement>(null);
   const connectionRef = useRef<any>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const remoteStreamRef = useRef<MediaStream | null>(null);
   const screenStreamRef = useRef<MediaStream | null>(null);
-  const animationFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
     // Ringtone setup
